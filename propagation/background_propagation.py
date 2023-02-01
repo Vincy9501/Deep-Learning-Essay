@@ -27,8 +27,8 @@ class NeuralNetwork(object):
         self.outputSize = 1
         self.hiddenSize = 3
 
-        self.W1 = np.random.randn(self.inputSize, self.hiddenSize)  # (3x2) weight matrix from input to hidden layer
-        self.W2 = np.random.randn(self.hiddenSize, self.outputSize)  # (3x1) weight matrix from hidden to output layer
+        self.W1 = np.random.randn(self.inputSize, self.hiddenSize)
+        self.W2 = np.random.randn(self.hiddenSize, self.outputSize)
 
     def forward(self, X):
         # np.dot 矩阵的乘法运算，返回两个数的点积
@@ -36,7 +36,7 @@ class NeuralNetwork(object):
         # 激活函数，用sigmoid压缩
         self.z2 = self.sigmoid(self.z)
         # 对隐藏层和第二组权重进行另一个点积
-        self.z3 = np.dot(self.z2, self.W2)  # dot product of hidden layer (z2) and second set of 3x1 weights
+        self.z3 = np.dot(self.z2, self.W2)
         # 压缩
         o = self.sigmoid(self.z3)
         return o
