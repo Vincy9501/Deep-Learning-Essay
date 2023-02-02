@@ -106,12 +106,82 @@ $$θ_j := θ_j - α \frac{1}{m}\sum^m_{1}(h(x^{(i)}) - y^{(i)})x^{(i)}$$
 	3. 确定是否所有的$θ_i$，梯度下降的距离都小于$ε$，如果小于$ε$则算法终止，当前所有的$θ_i(i=0,1,...n)$即为最终结果。否则进入步骤4；
 	4. 更新所有的$θ$， 对于$θ_i$，更新表达式如下。更新完毕后继续转入步骤1。
 	$$θ_i = θ_i - α \frac{∂}{∂θi}J(θ_0,θ_1...,θ_n)$$
+## 2.4 矩阵法
+
+首先，对于输入矩阵$X$为$m * n$的矩阵：
+$$ X =
+\begin{bmatrix} 
+x_{11} & x_{12} & {\cdots}& x_{1n} \\ 
+x_{21} & x_{12} & {\cdots}& x_{2n} \\ 
+{\vdots}&{\vdots}&{\ddots}&{\vdots}\\
+x_{m1} & x_{m2} & {\cdots}& x_{mn} \\ 
+\end{bmatrix}
+=
+\begin{bmatrix} 
+x_1^\mathrm T \\
+x_2^\mathrm T \\
+{\cdots} \\
+x_m^\mathrm T \\
+\end{bmatrix}
+$$
+所以预测值为$\hat y = Xw$：
+$$ X 
+=
+\begin{bmatrix} 
+x_1^\mathrm T \\
+x_2^\mathrm T \\
+{\cdots} \\
+x_m^\mathrm T \\
+\end{bmatrix}w 
+= 
+\begin{bmatrix} 
+x_1^\mathrm T w\\
+x_2^\mathrm T w\\
+{\cdots} \\
+x_m^\mathrm T w\\
+\end{bmatrix}
+=
+\begin{bmatrix} 
+z_w(x_1)\\
+z_w(x_2)\\
+{\cdots} \\
+z_w(x_m)\\
+\end{bmatrix}
+$$
+
+	因此预测值与真实值之间的均方误差为:
+
+$$MSE = \frac{1}{2} *(\hat y - y)^2 = \frac{1}{2} *(Xw - y)^2$$
+
+化简：
+$$MSE =\frac{1}{2} (Xw - y)^T(Xw - y)$$
+$$(Xw - y)^T(Xw - y) = w^TX^TXw - w^TX^Ty-y^TXw+y^Ty$$
+$$(Xw - y)^T(Xw - y) = w^TX^TXw - 2y^TXw+y^Ty$$
+求导：
+$$
+\frac {\partial (w^TX^TXw - 2y^TXw+y^Ty)}{\partial w} 
+$$
+$$ = \frac{\partial {(w^TX^TXw)}} {\partial w} -2\frac{\partial {(y^TXw)}} {\partial w} + \frac{\partial {(y^Ty)}} {\partial w}$$
+对于**第一项**：（利用公式化简）
+$$ \frac{\partial {(w^TX^TXw)}} {\partial w} = 2(X^TX)w$$
+对于**第二项**：（利用公式化简）
+$$\frac{\partial {(y^TXw)}} {\partial w} = X^T y$$
+对于**第三项**：等于0
+因此可以化简为：
+$$
+\frac {\partial (w^TX^TXw - 2y^TXw+y^Ty)}{\partial w} =
+2(X^TX)w - 2X^T y = X^T(Xw - y)
+$$
+于是：
+$$w = w - \alpha X^T(Xw - y)$$
+弄清楚向量化是怎么回事就很简单！
 
 # 3. 梯度下降的类型（BGD，SGD，MBGD）
 
 ## 3.1 批量梯度下降（Batch Gradient Descent）
 
 批量梯度下降 (BGD) 用于查找训练集（training set）中每个点的误差，并在评估所有训练示例后更新模型。这个过程被称为训练时期（the training epoch）。简而言之，需要在更新参数时使用所有的样本来进行更新。
+
 	$$θ_i = θ_i - α \sum^m_{j=1}(h_θ(x_0^{(j)}, x_1^{(j)}, ... x_n^{(j)}) - y_j)x_i^{(j)}$$
 优点：
 - 与其他梯度下降法相比，它产生的噪声更少。
@@ -147,4 +217,4 @@ Mini Batch 梯度下降是 batch 梯度下降和随机梯度下降的结合。�
 2. [梯度下降（Gradient Descent）小结](https://www.cnblogs.com/pinard/p/5970503.html)
 3. [Gradient Descent in Machine Learning](https://www.javatpoint.com/gradient-descent-in-machine-learning)
 4. [Gradient Descent in Python](https://towardsdatascience.com/gradient-descent-in-python-a0d07285742f)
-5. 
+5. [机器学习 | 优化——梯度下降（矩阵方式描述）](https://www.jianshu.com/p/af118278955e)
